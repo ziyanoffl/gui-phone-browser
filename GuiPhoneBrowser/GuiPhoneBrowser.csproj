@@ -1,0 +1,34 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <UseWPF>true</UseWPF>
+    <RuntimeIdentifier>win-x64</RuntimeIdentifier>
+    <SelfContained>true</SelfContained>
+    <PublishSingleFile>true</PublishSingleFile>
+    <IncludeNativeLibrariesForSelfExtract>true</IncludeNativeLibrariesForSelfExtract>
+    <DebugType>none</DebugType>
+    <DebugSymbols>false</DebugSymbols>
+    <AssemblyName>GuiPhoneBrowser</AssemblyName>
+    <RootNamespace>GuiPhoneBrowser</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="platform-tools\adb.exe">
+      <LogicalName>GuiPhoneBrowser.platform-tools.adb.exe</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="platform-tools\AdbWinApi.dll">
+      <LogicalName>GuiPhoneBrowser.platform-tools.AdbWinApi.dll</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="platform-tools\AdbWinUsbApi.dll">
+      <LogicalName>GuiPhoneBrowser.platform-tools.AdbWinUsbApi.dll</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="platform-tools\NOTICE.txt">
+      <LogicalName>GuiPhoneBrowser.platform-tools.NOTICE.txt</LogicalName>
+    </EmbeddedResource>
+  </ItemGroup>
+
+</Project>

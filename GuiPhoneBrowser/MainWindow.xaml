@@ -1,0 +1,447 @@
+<Window x:Class="GuiPhoneBrowser.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:GuiPhoneBrowser"
+        mc:Ignorable="d"
+        Title="GUI Phone Browser - Android File Transfer" Height="740" Width="1160"
+        MinHeight="550" MinWidth="850"
+        WindowStartupLocation="CenterScreen"
+        Background="#F5F6F8"
+        TextOptions.TextFormattingMode="Display"
+        UseLayoutRounding="True">
+
+    <Window.Resources>
+        <!-- Modern Styles -->
+        <Style x:Key="ActionButton" TargetType="Button">
+            <Setter Property="Background" Value="#2563EB"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="FontSize" Value="12"/>
+            <Setter Property="Padding" Value="10,6"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}"
+                                CornerRadius="4"
+                                Padding="{TemplateBinding Padding}">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="#1D4ED8"/>
+                </Trigger>
+                <Trigger Property="IsEnabled" Value="False">
+                    <Setter Property="Background" Value="#CBD5E1"/>
+                    <Setter Property="Foreground" Value="#94A3B8"/>
+                    <Setter Property="Cursor" Value="Arrow"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <Style x:Key="SecondaryButton" TargetType="Button">
+            <Setter Property="Background" Value="#E2E8F0"/>
+            <Setter Property="Foreground" Value="#1E293B"/>
+            <Setter Property="FontWeight" Value="Medium"/>
+            <Setter Property="FontSize" Value="12"/>
+            <Setter Property="Padding" Value="8,4"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="BorderBrush" Value="#CBD5E1"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="4"
+                                Padding="{TemplateBinding Padding}">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="#CBD5E1"/>
+                </Trigger>
+                <Trigger Property="IsEnabled" Value="False">
+                    <Setter Property="Background" Value="#F1F5F9"/>
+                    <Setter Property="Foreground" Value="#94A3B8"/>
+                    <Setter Property="BorderBrush" Value="#E2E8F0"/>
+                    <Setter Property="Cursor" Value="Arrow"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <Style x:Key="DangerButton" TargetType="Button">
+            <Setter Property="Background" Value="#DC2626"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="FontSize" Value="12"/>
+            <Setter Property="Padding" Value="8,4"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}"
+                                CornerRadius="4"
+                                Padding="{TemplateBinding Padding}">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="#B91C1C"/>
+                </Trigger>
+                <Trigger Property="IsEnabled" Value="False">
+                    <Setter Property="Background" Value="#E2E8F0"/>
+                    <Setter Property="Foreground" Value="#94A3B8"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <Style x:Key="NavTextBox" TargetType="TextBox">
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="Padding" Value="6,4"/>
+            <Setter Property="FontSize" Value="12"/>
+            <Setter Property="BorderBrush" Value="#CBD5E1"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Background" Value="White"/>
+        </Style>
+    </Window.Resources>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/> <!-- Top Connection Bar -->
+            <RowDefinition Height="*"/>    <!-- Two Pane Explorer Area -->
+            <RowDefinition Height="Auto"/> <!-- Bottom Transfer Status & Log -->
+        </Grid.RowDefinitions>
+
+        <!-- TOP BAR -->
+        <Border Grid.Row="0" Background="White" BorderBrush="#E2E8F0" BorderThickness="0,0,0,1" Padding="12,8">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+
+                <!-- Title & Brand -->
+                <StackPanel Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Center" Margin="0,0,20,0">
+                    <TextBlock Text="📱" FontSize="20" VerticalAlignment="Center" Margin="0,0,6,0"/>
+                    <TextBlock Text="GUI Phone Browser" FontSize="16" FontWeight="Bold" Foreground="#0F172A" VerticalAlignment="Center"/>
+                    <Border Background="#EEF2F6" CornerRadius="4" Margin="10,0,0,0" Padding="6,2">
+                        <TextBlock x:Name="TxtAdbStatus" Text="ADB: Ready" FontSize="11" Foreground="#475569" VerticalAlignment="Center"/>
+                    </Border>
+                </StackPanel>
+
+                <!-- Device Selector -->
+                <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
+                    <TextBlock Text="Android Device:" FontWeight="Medium" Foreground="#334155" VerticalAlignment="Center" Margin="0,0,8,0"/>
+                    <ComboBox x:Name="CboDevices" MinWidth="260" MaxWidth="380" Height="28" VerticalContentAlignment="Center"
+                              SelectionChanged="CboDevices_SelectionChanged" DisplayMemberPath="DisplayName"/>
+                    <Button x:Name="BtnRefreshDevices" Content="🔄 Refresh" Style="{StaticResource SecondaryButton}" Margin="6,0,0,0" Height="28" Click="BtnRefreshDevices_Click"/>
+                    
+                    <Border x:Name="BadgeDeviceState" Margin="10,0,0,0" CornerRadius="4" Padding="8,4" Background="#F1F5F9" VerticalAlignment="Center">
+                        <TextBlock x:Name="TxtDeviceState" Text="No device selected" FontSize="11" FontWeight="SemiBold" Foreground="#64748B"/>
+                    </Border>
+                </StackPanel>
+
+                <!-- Help & Info -->
+                <StackPanel Grid.Column="2" Orientation="Horizontal" VerticalAlignment="Center">
+                    <Button x:Name="BtnAbout" Content="ℹ️ Info &amp; Timestamps" Style="{StaticResource SecondaryButton}" Height="28" Click="BtnAbout_Click"/>
+                </StackPanel>
+            </Grid>
+        </Border>
+
+        <!-- MAIN TWO-PANE EXPLORER -->
+        <Grid Grid.Row="1" Margin="10,8,10,6">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="1*" MinWidth="300"/> <!-- PC Pane -->
+                <ColumnDefinition Width="110"/>              <!-- Middle Transfer Buttons -->
+                <ColumnDefinition Width="1*" MinWidth="300"/> <!-- Phone Pane -->
+            </Grid.ColumnDefinitions>
+
+            <!-- LEFT PANE: WINDOWS PC -->
+            <Border Grid.Column="0" Background="White" BorderBrush="#CBD5E1" BorderThickness="1" CornerRadius="6">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/> <!-- PC Header -->
+                        <RowDefinition Height="Auto"/> <!-- PC Nav Bar -->
+                        <RowDefinition Height="*"/>    <!-- PC File List -->
+                        <RowDefinition Height="Auto"/> <!-- PC Status Footer -->
+                    </Grid.RowDefinitions>
+
+                    <!-- Pane Header -->
+                    <Border Grid.Row="0" Background="#F8FAFC" BorderBrush="#E2E8F0" BorderThickness="0,0,0,1" Padding="10,8" CornerRadius="6,6,0,0">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Grid.Column="0" Text="💻 Windows PC" FontWeight="Bold" FontSize="13" Foreground="#1E293B" VerticalAlignment="Center"/>
+                            <ComboBox Grid.Column="1" x:Name="CboPcShortcuts" Margin="10,0,0,0" Height="26" VerticalContentAlignment="Center"
+                                      SelectionChanged="CboPcShortcuts_SelectionChanged" DisplayMemberPath="Name"/>
+                        </Grid>
+                    </Border>
+
+                    <!-- Nav Bar -->
+                    <Border Grid.Row="1" Background="#F1F5F9" Padding="6,4" BorderBrush="#E2E8F0" BorderThickness="0,0,0,1">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <Button Grid.Column="0" x:Name="BtnPcUp" Content="⬆ Up" Style="{StaticResource SecondaryButton}" Margin="0,0,4,0" Click="BtnPcUp_Click"/>
+                            <Button Grid.Column="1" x:Name="BtnPcRefresh" Content="🔄" Style="{StaticResource SecondaryButton}" Margin="0,0,4,0" ToolTip="Refresh" Click="BtnPcRefresh_Click"/>
+                            <TextBox Grid.Column="2" x:Name="TxtPcPath" Style="{StaticResource NavTextBox}" KeyDown="TxtPcPath_KeyDown"/>
+                            <Button Grid.Column="3" Content="Go" Style="{StaticResource SecondaryButton}" Margin="4,0,0,0" Click="BtnPcGo_Click"/>
+                            <Button Grid.Column="4" x:Name="BtnPcNewFolder" Content="📁+ New" Style="{StaticResource SecondaryButton}" Margin="4,0,0,0" Click="BtnPcNewFolder_Click"/>
+                            <Button Grid.Column="5" x:Name="BtnPcDelete" Content="🗑️" Style="{StaticResource DangerButton}" Margin="4,0,0,0" ToolTip="Delete selected item" Click="BtnPcDelete_Click"/>
+                        </Grid>
+                    </Border>
+
+                    <!-- File ListView -->
+                    <ListView Grid.Row="2" x:Name="LvPcFiles" SelectionMode="Extended"
+                              MouseDoubleClick="LvPcFiles_MouseDoubleClick" KeyDown="LvPcFiles_KeyDown"
+                              SelectionChanged="LvPcFiles_SelectionChanged" BorderThickness="0">
+                        <ListView.View>
+                            <GridView>
+                                <GridViewColumn Header="Name" Width="240">
+                                    <GridViewColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <StackPanel Orientation="Horizontal">
+                                                <TextBlock Text="{Binding IconKind, Converter={x:Null}}" Margin="0,0,6,0">
+                                                    <TextBlock.Style>
+                                                        <Style TargetType="TextBlock">
+                                                            <Style.Triggers>
+                                                                <DataTrigger Binding="{Binding IsParentDirectory}" Value="True">
+                                                                    <Setter Property="Text" Value="📁⬆"/>
+                                                                </DataTrigger>
+                                                                <DataTrigger Binding="{Binding IsDirectory}" Value="True">
+                                                                    <Setter Property="Text" Value="📁"/>
+                                                                    <Setter Property="Foreground" Value="#F59E0B"/>
+                                                                </DataTrigger>
+                                                                <DataTrigger Binding="{Binding IsDirectory}" Value="False">
+                                                                    <Setter Property="Text" Value="📄"/>
+                                                                    <Setter Property="Foreground" Value="#64748B"/>
+                                                                </DataTrigger>
+                                                            </Style.Triggers>
+                                                        </Style>
+                                                    </TextBlock.Style>
+                                                </TextBlock>
+                                                <TextBlock Text="{Binding Name}" FontWeight="{Binding IsDirectory, Converter={x:Null}}">
+                                                    <TextBlock.Style>
+                                                        <Style TargetType="TextBlock">
+                                                            <Style.Triggers>
+                                                                <DataTrigger Binding="{Binding IsDirectory}" Value="True">
+                                                                    <Setter Property="FontWeight" Value="SemiBold"/>
+                                                                </DataTrigger>
+                                                            </Style.Triggers>
+                                                        </Style>
+                                                    </TextBlock.Style>
+                                                </TextBlock>
+                                            </StackPanel>
+                                        </DataTemplate>
+                                    </GridViewColumn.CellTemplate>
+                                </GridViewColumn>
+                                <GridViewColumn Header="Type" Width="70" DisplayMemberBinding="{Binding DisplayType}"/>
+                                <GridViewColumn Header="Size" Width="90" DisplayMemberBinding="{Binding DisplaySize}"/>
+                                <GridViewColumn Header="Modified" Width="140" DisplayMemberBinding="{Binding DisplayModified}"/>
+                            </GridView>
+                        </ListView.View>
+                    </ListView>
+
+                    <!-- PC Status Footer -->
+                    <Border Grid.Row="3" Background="#F8FAFC" BorderBrush="#E2E8F0" BorderThickness="0,1,0,0" Padding="8,4" CornerRadius="0,0,6,6">
+                        <TextBlock x:Name="TxtPcStatus" Text="Ready" FontSize="11" Foreground="#64748B"/>
+                    </Border>
+                </Grid>
+            </Border>
+
+            <!-- CENTER TRANSFER ACTION BUTTONS -->
+            <StackPanel Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="6,0">
+                <Button x:Name="BtnCopyPcToPhone" Content="➔ Copy" Style="{StaticResource ActionButton}" Margin="0,4"
+                        ToolTip="Copy selected PC files to current phone folder" Click="BtnCopyPcToPhone_Click"/>
+                
+                <Button x:Name="BtnMovePcToPhone" Content="➔ Move" Style="{StaticResource ActionButton}" Margin="0,4" Background="#4F46E5"
+                        ToolTip="Move selected files to the phone after verifying size and modified time. Folder moves are disabled." Click="BtnMovePcToPhone_Click"/>
+
+                <Separator Margin="0,10" Background="#CBD5E1"/>
+
+                <Button x:Name="BtnCopyPhoneToPc" Content="⬅ Copy" Style="{StaticResource ActionButton}" Margin="0,4"
+                        ToolTip="Copy selected Phone files to current PC folder" Click="BtnCopyPhoneToPc_Click"/>
+
+                <Button x:Name="BtnMovePhoneToPc" Content="⬅ Move" Style="{StaticResource ActionButton}" Margin="0,4" Background="#4F46E5"
+                        ToolTip="Move selected files to the PC after verifying size. Folder moves are disabled." Click="BtnMovePhoneToPc_Click"/>
+            </StackPanel>
+
+            <!-- RIGHT PANE: ANDROID PHONE -->
+            <Border Grid.Column="2" Background="White" BorderBrush="#CBD5E1" BorderThickness="1" CornerRadius="6">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/> <!-- Phone Header -->
+                        <RowDefinition Height="Auto"/> <!-- Phone Nav Bar -->
+                        <RowDefinition Height="*"/>    <!-- Phone File List -->
+                        <RowDefinition Height="Auto"/> <!-- Phone Status Footer -->
+                    </Grid.RowDefinitions>
+
+                    <!-- Phone Header -->
+                    <Border Grid.Row="0" Background="#F8FAFC" BorderBrush="#E2E8F0" BorderThickness="0,0,0,1" Padding="10,8" CornerRadius="6,6,0,0">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Grid.Column="0" Text="📱 Android Phone" FontWeight="Bold" FontSize="13" Foreground="#1E293B" VerticalAlignment="Center"/>
+                            <ComboBox Grid.Column="1" x:Name="CboPhoneShortcuts" Margin="10,0,0,0" Height="26" VerticalContentAlignment="Center"
+                                      SelectionChanged="CboPhoneShortcuts_SelectionChanged" DisplayMemberPath="Name"/>
+                        </Grid>
+                    </Border>
+
+                    <!-- Phone Nav Bar -->
+                    <Border Grid.Row="1" Background="#F1F5F9" Padding="6,4" BorderBrush="#E2E8F0" BorderThickness="0,0,0,1">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <Button Grid.Column="0" x:Name="BtnPhoneUp" Content="⬆ Up" Style="{StaticResource SecondaryButton}" Margin="0,0,4,0" Click="BtnPhoneUp_Click"/>
+                            <Button Grid.Column="1" x:Name="BtnPhoneRefresh" Content="🔄" Style="{StaticResource SecondaryButton}" Margin="0,0,4,0" ToolTip="Refresh" Click="BtnPhoneRefresh_Click"/>
+                            <TextBox Grid.Column="2" x:Name="TxtPhonePath" Style="{StaticResource NavTextBox}" KeyDown="TxtPhonePath_KeyDown"/>
+                            <Button Grid.Column="3" Content="Go" Style="{StaticResource SecondaryButton}" Margin="4,0,0,0" Click="BtnPhoneGo_Click"/>
+                            <Button Grid.Column="4" x:Name="BtnPhoneNewFolder" Content="📁+ New" Style="{StaticResource SecondaryButton}" Margin="4,0,0,0" Click="BtnPhoneNewFolder_Click"/>
+                            <Button Grid.Column="5" x:Name="BtnPhoneDelete" Content="🗑️" Style="{StaticResource DangerButton}" Margin="4,0,0,0" ToolTip="Delete selected item" Click="BtnPhoneDelete_Click"/>
+                        </Grid>
+                    </Border>
+
+                    <!-- Phone File ListView -->
+                    <ListView Grid.Row="2" x:Name="LvPhoneFiles" SelectionMode="Extended"
+                              MouseDoubleClick="LvPhoneFiles_MouseDoubleClick" KeyDown="LvPhoneFiles_KeyDown"
+                              SelectionChanged="LvPhoneFiles_SelectionChanged" BorderThickness="0">
+                        <ListView.View>
+                            <GridView>
+                                <GridViewColumn Header="Name" Width="230">
+                                    <GridViewColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <StackPanel Orientation="Horizontal">
+                                                <TextBlock Text="{Binding IconKind, Converter={x:Null}}" Margin="0,0,6,0">
+                                                    <TextBlock.Style>
+                                                        <Style TargetType="TextBlock">
+                                                            <Style.Triggers>
+                                                                <DataTrigger Binding="{Binding IsParentDirectory}" Value="True">
+                                                                    <Setter Property="Text" Value="📁⬆"/>
+                                                                </DataTrigger>
+                                                                <DataTrigger Binding="{Binding IsDirectory}" Value="True">
+                                                                    <Setter Property="Text" Value="📁"/>
+                                                                    <Setter Property="Foreground" Value="#10B981"/>
+                                                                </DataTrigger>
+                                                                <DataTrigger Binding="{Binding IsDirectory}" Value="False">
+                                                                    <Setter Property="Text" Value="📄"/>
+                                                                    <Setter Property="Foreground" Value="#64748B"/>
+                                                                </DataTrigger>
+                                                            </Style.Triggers>
+                                                        </Style>
+                                                    </TextBlock.Style>
+                                                </TextBlock>
+                                                <TextBlock Text="{Binding Name}">
+                                                    <TextBlock.Style>
+                                                        <Style TargetType="TextBlock">
+                                                            <Style.Triggers>
+                                                                <DataTrigger Binding="{Binding IsDirectory}" Value="True">
+                                                                    <Setter Property="FontWeight" Value="SemiBold"/>
+                                                                </DataTrigger>
+                                                            </Style.Triggers>
+                                                        </Style>
+                                                    </TextBlock.Style>
+                                                </TextBlock>
+                                            </StackPanel>
+                                        </DataTemplate>
+                                    </GridViewColumn.CellTemplate>
+                                </GridViewColumn>
+                                <GridViewColumn Header="Type" Width="70" DisplayMemberBinding="{Binding DisplayType}"/>
+                                <GridViewColumn Header="Size" Width="90" DisplayMemberBinding="{Binding DisplaySize}"/>
+                                <GridViewColumn Header="Modified" Width="140" DisplayMemberBinding="{Binding DisplayModified}"/>
+                                <GridViewColumn Header="Permissions" Width="90" DisplayMemberBinding="{Binding Permissions}"/>
+                            </GridView>
+                        </ListView.View>
+                    </ListView>
+
+                    <!-- Phone Status Footer -->
+                    <Border Grid.Row="3" Background="#F8FAFC" BorderBrush="#E2E8F0" BorderThickness="0,1,0,0" Padding="8,4" CornerRadius="0,0,6,6">
+                        <TextBlock x:Name="TxtPhoneStatus" Text="Ready" FontSize="11" Foreground="#64748B"/>
+                    </Border>
+                </Grid>
+            </Border>
+        </Grid>
+
+        <!-- BOTTOM STATUS, PROGRESS & LOG -->
+        <Border Grid.Row="2" Background="White" BorderBrush="#E2E8F0" BorderThickness="0,1,0,0" Padding="12,8">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+
+                <!-- Active Progress Row -->
+                <Grid Grid.Row="0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+
+                    <StackPanel Grid.Column="0" VerticalAlignment="Center">
+                        <TextBlock x:Name="TxtTransferStatus" Text="Ready" FontSize="12" FontWeight="Medium" Foreground="#1E293B"/>
+                        <ProgressBar x:Name="PbTransfer" Height="10" Margin="0,4,0,0" Maximum="100" Value="0" Background="#E2E8F0" Foreground="#2563EB"/>
+                    </StackPanel>
+
+                    <Button Grid.Column="1" x:Name="BtnCancelTransfer" Content="✖ Cancel" Style="{StaticResource DangerButton}"
+                            Margin="12,0,0,0" Height="26" IsEnabled="False" Click="BtnCancelTransfer_Click"/>
+
+                    <Button Grid.Column="2" x:Name="BtnToggleLog" Content="📜 Show Log" Style="{StaticResource SecondaryButton}"
+                            Margin="6,0,0,0" Height="26" Click="BtnToggleLog_Click"/>
+                </Grid>
+
+                <!-- Expandable Log Drawer -->
+                <Border Grid.Row="1" x:Name="BorderLogDrawer" Visibility="Collapsed" Margin="0,8,0,0"
+                        Background="#0F172A" CornerRadius="4" Padding="8" MaxHeight="140">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+                        <Grid Grid.Row="0" Margin="0,0,0,4">
+                            <TextBlock Text="Transfer Activity &amp; Timestamp Log" Foreground="#94A3B8" FontSize="11" FontWeight="SemiBold"/>
+                            <Button Content="Clear" Style="{StaticResource SecondaryButton}" HorizontalAlignment="Right" Padding="4,1" FontSize="10" Click="BtnClearLog_Click"/>
+                        </Grid>
+                        <ScrollViewer Grid.Row="1" x:Name="SvLog" VerticalScrollBarVisibility="Auto">
+                            <TextBox x:Name="TxtLogOutput" IsReadOnly="True" Background="Transparent" Foreground="#E2E8F0"
+                                     BorderThickness="0" FontFamily="Consolas, Courier New" FontSize="11"
+                                     TextWrapping="Wrap"/>
+                        </ScrollViewer>
+                    </Grid>
+                </Border>
+            </Grid>
+        </Border>
+    </Grid>
+</Window>

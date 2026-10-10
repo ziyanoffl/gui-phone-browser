@@ -1,0 +1,14 @@
+# Build output
+**/bin/
+**/obj/
+publish/
+.vs/
+*.user
+*.suo
+
+# Keep only the ADB files embedded by the app; omit unrelated platform-tools binaries.
+GuiPhoneBrowser/platform-tools/*
+!GuiPhoneBrowser/platform-tools/adb.exe
+!GuiPhoneBrowser/platform-tools/AdbWinApi.dll
+!GuiPhoneBrowser/platform-tools/AdbWinUsbApi.dll
+!GuiPhoneBrowser/platform-tools/NOTICE.txt
